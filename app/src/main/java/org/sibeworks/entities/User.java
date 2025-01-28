@@ -6,26 +6,26 @@ public class User {
 
     private String name;
     private  String password;
-    private String hashPssword;
+    private String hashPassword;
     private List<Ticket> ticketsBooked;
     private  String userId;
 
 
-    public User(String name, String password, String hashPssword, List<Ticket> ticketsBooked, String userId) {
+    public User(String name, String password, String hashPassword, List<Ticket> ticketsBooked, String userId) {
         this.name = name;
         this.password = password;
-        this.hashPssword = hashPssword;
+        this.hashPassword = hashPassword;
         this.ticketsBooked = ticketsBooked;
         this.userId = userId;
     }
 
 
-    public String getHashPssword() {
-        return hashPssword;
+    public String getHashPassword() {
+        return hashPassword;
     }
 
-    public void setHashPssword(String hashPssword) {
-        this.hashPssword = hashPssword;
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
     }
 
     public String getPassword() {

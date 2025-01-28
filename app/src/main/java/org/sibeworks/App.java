@@ -3,12 +3,59 @@
  */
 package org.sibeworks;
 
+import org.sibeworks.entities.User;
+import org.sibeworks.services.UserBookingService;
+import org.sibeworks.util.UserServiceUtil;
+
+import java.io.IOException;
+import java.util.*;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+//        System.out.println(new App().getGreeting());
+        System.out.println("Running Train Booking System!");
+        Scanner scanner = new Scanner(System.in);
+        int option = 0;
+        UserBookingService userBookingService;
+
+        try {
+            userBookingService = new UserBookingService();
+
+        } catch (IOException e) {
+            System.err.println("There is something wrong");
+            return;
+        }
+
+        while (option != 7) {
+
+            System.out.println("1. Sign up");
+            System.out.println("2. Login");
+            System.out.println("3. Fetch Bookings");
+            System.out.println("4. Search Trains");
+            System.out.println("5. Book a seat");
+            System.out.println("6. Cancel my Booking");
+            System.out.println("7. Exit the App");
+
+            option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    System.out.println("Enter username to signup");
+                    String nameToSignUp = scanner.next();
+                    System.out.println("Enter the password to signup");
+                    String passwordToSignUp = scanner.next();
+
+                    User userToSignUp = new User(nameToSignUp, passwordToSignUp, UserServiceUtil.hashPassword(passwordToSignUp), new ArrayList<>(), UUID.randomUUID().toString());
+                    userBookingService.signUp(userToSignUp);
+                    break;
+            }
+
+        }
     }
+
 }
