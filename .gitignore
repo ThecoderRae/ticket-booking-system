@@ -4,7 +4,8 @@
 # Ignore Gradle build output directory
 build
 
-# Ignore intellij config
-.idea
-.vscode
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
 
