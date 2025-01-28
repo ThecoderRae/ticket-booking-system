@@ -1,0 +1,44 @@
+[
+  {
+    "train_id": "gautrain",
+    "train_no": 12345,
+    "seats": [
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0]
+    ],
+    "station_times": {
+      "Johannesburg": "13:50:00",
+      "Polokwane": "13:50:00",
+      "Durban": "13:50:00",
+      "Cape Town": "13:50:00"
+    },
+    "stations": [
+      "Johannesburg",
+      "Polokwane",
+      "Durban",
+      "Cape Town"
+    ]
+  },
+  {
+    "train_id": "bacs",
+    "train_no": 12345,
+    "seats": [
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0],
+      [0,0,0,0,0,0]
+    ],
+    "station_times": {
+      "bangalore": "14:50:00",
+      "jaipur": "14:50:00",
+      "delhi": "14:50:00"
+    },
+    "stations": [
+      "bangalore",
+      "jaipur",
+      "delhi"
+    ]
+  }
+]

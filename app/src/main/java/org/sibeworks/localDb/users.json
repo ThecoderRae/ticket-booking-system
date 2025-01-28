@@ -1,28 +1,28 @@
 [
   {
-    "user_id": "12345",
+    "userId": "12345",
     "name": "Raesibe Gwangwa",
-    "hashed_password": "12345",
-    "tickets_booked": [
+    "hashPassword": "12345",
+    "ticketsBooked": [
       {
         "source": "Johannesburg",
         "destination": "Polokwane",
-        "date_of_travel": "2024-12-10T18:30:00",
+        "dateOfTravel": "2024-12-10T18:30:00",
         "train": {
-          "train_id": "gautrain",
-          "train_number": 56789,
+          "trainId": "gautrain",
+          "trainNumber": 56789,
           "seats": [
             [0,0,0,0,0,0],
             [0,0,0,0,0,0],
             [0,0,0,0,0,0],
             [0,0,0,0,0,0]
           ],
-          "stations": {
-            "Johannesburg": "13:50:00",
-            "Polokwane": "13:50:00",
-            "Durban": "13:50:00",
-            "Cape Town": "13:50:00"
-          }
+          "stations": [
+            "Johannesburg",
+            "Polokwane",
+            "Durban",
+            "Cape Town"
+          ]
         }
       }
     ]
