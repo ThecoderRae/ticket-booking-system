@@ -4,56 +4,72 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sibeworks.entities.Train;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrainService {
 
-    private List<Train> trainList;
+    private static final String TRAINS_PATH = "localDb/trains.json";  // Ensure correct path in classpath
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private List<Train> trainList = new ArrayList<>();
 
-    public TrainService(List<Train> trainList) {
-        this.trainList = trainList;
+    public TrainService() {}
+
+    public List<Train> loadTrainData() throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(TRAINS_PATH);
+
+        if (inputStream == null) {
+            throw new IOException("Train data file not found in the classpath.");
+        }
+
+        return objectMapper.readValue(inputStream, new TypeReference<List<Train>>() {});
     }
 
-    public TrainService() {
-        this.trainList = new ArrayList<>();
+
+    public List<Train> getTrainList() {
         try {
-            loadTrainData();
+            if (trainList.isEmpty()) {  // Check if train list is empty and load data if needed
+                trainList = loadTrainData();
+                System.out.println("Train data loaded successfully: " + trainList);
+            }
         } catch (IOException e) {
             System.err.println("Error loading train data: " + e.getMessage());
         }
-    }
-
-    private void loadTrainData() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File trainsFile = new File("path/to/trains.json"); // Update the path
-        if (trainsFile.exists()) {
-            trainList = objectMapper.readValue(trainsFile, new TypeReference<List<Train>>() {});
-        } else {
-            System.err.println("trains.json file not found at: " + trainsFile.getAbsolutePath());
-        }
-    }
-
-    public List<Train> getTrainList() {
         return trainList;
     }
 
-    public void setTrainList(List<Train> trainList) {
-        this.trainList = trainList;
-    }
 
     public List<Train> searchTrains(String source, String destination) {
-        return trainList.stream().filter(train -> validTrain(train, source, destination)).collect(Collectors.toList());
+        if (source == null || destination == null || source.isEmpty() || destination.isEmpty()) {
+            System.out.println("Source and destination cannot be empty.");
+            return new ArrayList<>(); // Return an empty list if either source or destination is invalid
+        }
+
+        // Create new effectively final variables for use in lambda expressions
+        final String normalizedSource = source.trim().toLowerCase();  // Ensure case-insensitive matching
+        final String normalizedDestination = destination.trim().toLowerCase();  // Ensure case-insensitive matching
+
+        return getTrainList().stream()
+                .filter(train -> validTrain(train, normalizedSource, normalizedDestination))  // Use final variables
+                .collect(Collectors.toList());
     }
+
 
     private boolean validTrain(Train train, String source, String destination) {
         List<String> stationOrder = train.getStations();
 
+        // Debugging output: Print available stations
+        System.out.println("Available stations: " + stationOrder);
+
+        // Convert stations to lowercase for case-insensitive matching
         int sourceIndex = stationOrder.indexOf(source.toLowerCase());
         int destinationIndex = stationOrder.indexOf(destination.toLowerCase());
+
+        // Debugging output: Print source and destination index
+        System.out.println("Source index: " + sourceIndex + ", Destination index: " + destinationIndex);
 
         return sourceIndex != -1 && destinationIndex != -1 && sourceIndex < destinationIndex;
     }

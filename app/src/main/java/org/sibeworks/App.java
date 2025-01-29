@@ -2,6 +2,7 @@ package org.sibeworks;
 
 import org.sibeworks.entities.Train;
 import org.sibeworks.entities.User;
+import org.sibeworks.services.TrainService;
 import org.sibeworks.services.UserBookingService;
 import org.sibeworks.util.UserServiceUtil;
 
@@ -13,7 +14,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Running Train Booking System!");
         Scanner scanner = new Scanner(System.in);
-        int option = 0;
+        int choice = 0;
 
         UserBookingService userBookingService;
         Train trainSelectedForBooking = null; // Initialize to null
@@ -21,12 +22,13 @@ public class App {
 
         try {
             userBookingService = new UserBookingService();
+
         } catch (IOException e) {
             System.err.println("Error loading user data: " + e.getMessage());
             return;
         }
 
-        while (option != 7) {
+        while (choice != 7) {
             System.out.println("\nChoose an option:");
             System.out.println("1. Sign up");
             System.out.println("2. Login");
@@ -37,14 +39,14 @@ public class App {
             System.out.println("7. Exit the App");
 
             try {
-                option = scanner.nextInt();
+                choice = scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.err.println("Invalid input! Please enter a number between 1 and 7.");
                 scanner.next(); // Clear invalid input
                 continue;
             }
 
-            switch (option) {
+            switch (choice) {
                 case 1: // Sign Up
                     System.out.println("Enter username to sign up:");
                     String nameToSignUp = scanner.next();
@@ -85,35 +87,36 @@ public class App {
 
                 case 4: // Search Trains
                     System.out.println("Enter your source station:");
-                    String source = scanner.next();
+                    String source = scanner.next().trim().toLowerCase();  // Trim and convert to lowercase
                     System.out.println("Enter your destination station:");
-                    String destination = scanner.next();
+                    String destination = scanner.next().trim().toLowerCase();  // Trim and convert to lowercase
 
-                    List<Train> trains = userBookingService.getTrains(source, destination);
+                    // Search for trains using the TrainService (replace userBookingService with TrainService)
+                    List<Train> trains =  new TrainService().getTrainList();  // Assuming trainService is your TrainService object
+                    System.out.println("Trains inside trains: " + trains);
                     if (trains.isEmpty()) {
                         System.out.println("No trains found for the given route.");
-                        break;
-                    }
-
-                    System.out.println("Available trains:");
-                    for (int i = 0; i < trains.size(); i++) {
-                        Train train = trains.get(i);
-                        System.out.println((i + 1) + ". Train ID: " + train.getTrainId());
-                        train.getStationTimes().forEach((station, time) -> System.out.println(" - " + station + ": " + time));
-                    }
-
-                    System.out.println("Select a train by typing its number:");
-                    try {
-                        int trainIndex = scanner.nextInt() - 1;
-                        if (trainIndex < 0 || trainIndex >= trains.size()) {
-                            System.err.println("Invalid train selection.");
-                            break;
+                    } else {
+                        System.out.println("Available trains:");
+                        for (int i = 0; i < trains.size(); i++) {
+                            Train train = trains.get(i);
+                            System.out.println((i + 1) + ". Train ID: " + train.getTrainId());
+                            train.getStationTimes().forEach((station, time) -> System.out.println(" - " + station + ": " + time));
                         }
-                        trainSelectedForBooking = trains.get(trainIndex);
-                        System.out.println("Train selected: " + trainSelectedForBooking.getTrainId());
-                    } catch (InputMismatchException e) {
-                        System.err.println("Invalid input! Please enter a valid number.");
-                        scanner.next(); // Clear invalid input
+
+                        System.out.println("Select a train by typing its number:");
+                        try {
+                            int trainIndex = scanner.nextInt() - 1;
+                            if (trainIndex < 0 || trainIndex >= trains.size()) {
+                                System.err.println("Invalid train selection.");
+                                break;
+                            }
+                            trainSelectedForBooking = trains.get(trainIndex);
+                            System.out.println("Train selected: " + trainSelectedForBooking.getTrainId());
+                        } catch (InputMismatchException e) {
+                            System.err.println("Invalid input! Please enter a valid number.");
+                            scanner.next();
+                        }
                     }
                     break;
 
